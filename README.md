@@ -1,5 +1,5 @@
 # MiniSat-J
-MiniSat-J is a porting MiniSat2.0 to Java
+MiniSat-J is a porting MiniSat2.0 to Java8
 
 ## Run from command line
 ```
