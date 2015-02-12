@@ -34,17 +34,20 @@ MiniSat-J is a porting MiniSat2.0 to Java8
 
 ## Run from Java application
 
+Here is a sample problem.
+
+```
+p cnf 3 2
+1 -3 0
+2 3 -1 0
+0
+```
+
+Solving this problem by Java using Minisat-J API.
+ 
 ```java
-/*
- * Solving a simple problem
- * 
- *  p cnf 3 2
- *  1 -3 0
- *  2 3 -1 0
- *  0
- */
 @Test
-public void testSolveSimple() {
+public void testSolveSimple2() {
     Solver solver = new Solver();
     VecLit clause1 = new VecLit();
     clause1.push(Lit.valueOf(1, false));
@@ -56,7 +59,7 @@ public void testSolveSimple() {
     clause2.push(Lit.valueOf(1, true));
     solver.addClause(clause2);
     boolean result = solver.solve();
-    assertEquals(true, result);
+    assertEquals(true, result);	// must be satisfiable
     Lbool [] expects = {Lbool.FALSE, Lbool.FALSE, Lbool.FALSE};
     if (result)
         for (int i = 0, size = expects.length; i < size; ++i)
@@ -64,3 +67,52 @@ public void testSolveSimple() {
 }
 ```
 
+or more simply
+
+```java
+@Test
+public void testSolveSimple() {
+        Lbool [] expects = {Lbool.FALSE, Lbool.FALSE, Lbool.FALSE};
+        Solver solver = new Solver();
+        solver.addClause(1, -3);
+        solver.addClause(2, 3, -1);
+        boolean result = solver.solve();
+        assertEquals(true, result);
+        if (result)
+            for (int i = 0, size = expects.length; i < size; ++i)
+                assertEquals(expects[i], solver.model.get(i));
+}
+```
+
+## Find all solutions
+
+If there are many solutions,
+you can obtain all of them.
+
+```java
+int deny(Solver solver, int v) {
+    return solver.model.get(v - 1) == Lbool.TRUE ? -v : v;
+}
+
+@Test
+public void testFindAllSolutions() {
+    Solver solver = new Solver();
+    solver.addClause(1, 2);
+    solver.addClause(-1, -2);
+    solver.addClause(2, 3);
+    solver.addClause(-2, -3);
+    solver.addClause(3, 4);
+    solver.addClause(-3, -4);
+    solver.addClause(4, 1);
+    solver.addClause(-4, -1);
+    int numberOfSolutions = 0;
+    while (solver.solve()) {
+        ++numberOfSolutions;
+        System.out.printf("solution %d : %s%n", numberOfSolutions, solver.model);
+        // add a clause which deny found solution
+        solver.addClause(deny(solver, 1), deny(solver, 2), deny(solver, 3), deny(solver, 4));
+    }
+    System.out.printf("number of solution = %d%n", numberOfSolutions);
+    assertEquals(2, numberOfSolutions);
+}
+```

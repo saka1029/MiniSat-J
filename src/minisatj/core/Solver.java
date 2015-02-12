@@ -442,6 +442,16 @@ public class Solver {
 //inline bool     Solver::addClause       (Lit p, Lit q, Lit r)   { add_tmp.clear(); add_tmp.push(p); add_tmp.push(q); add_tmp.push(r); return addClause_(add_tmp); }
 	boolean addClause(Lit p, Lit q, Lit r)   { add_tmp.clear(); add_tmp.push(p); add_tmp.push(q); add_tmp.push(r); return addClause_(add_tmp); }
 //inline bool     Solver::locked          (const Clause& c) const { return value(c[0]) == l_True && reason(var(c[0])) != CRef_Undef && ca.lea(reason(var(c[0]))) == &c; }
+	public boolean addClause(int... vars) {
+		add_tmp.clear();
+		for (int var : vars) {
+			if (var == 0)
+				throw new IllegalArgumentException("all vars must not be zero");
+			add_tmp.push(Lit.valueOf(Math.abs(var) - 1, var < 0));
+		}
+		return addClause_(add_tmp);
+	}
+
 	boolean locked(Clause c) {
 //        return value(c[0]) == l_True && reason(var(c[0])) != CRef_Undef && ca.lea(reason(var(c[0]))) == &c;
 	    Clause rc = reason(Var.valueOf(c.get(0).var()));

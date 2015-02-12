@@ -481,17 +481,16 @@ function setDocumentScrollTop(ypos)
 
 </code></pre> 
 <h2> <a id="user-content-run-from-java-application" class="anchor" href="..md.html#run-from-java-application" aria-hidden="true"><span class="octicon octicon-link"></span></a>Run from Java application</h2> 
+<p>Here is a sample problem.</p> 
+<pre><code>p cnf 3 2
+1 -3 0
+2 3 -1 0
+0
+</code></pre> 
+<p>Solving this problem by Java using Minisat-J API.</p> 
 <div class="highlight highlight-java">
- <pre><span class="pl-c">/*</span>
-<span class="pl-c"> * Solving a simple problem</span>
-<span class="pl-c"> * </span>
-<span class="pl-c"> *  p cnf 3 2</span>
-<span class="pl-c"> *  1 -3 0</span>
-<span class="pl-c"> *  2 3 -1 0</span>
-<span class="pl-c"> *  0</span>
-<span class="pl-c"> */</span>
-@<span class="pl-stj">Test</span>
-<span class="pl-s">public</span> <span class="pl-st">void</span> testSolveSimple() {
+ <pre>@<span class="pl-stj">Test</span>
+<span class="pl-s">public</span> <span class="pl-st">void</span> testSolveSimple2() {
     <span class="pl-stj">Solver</span> solver <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-stj">Solver</span>();
     <span class="pl-stj">VecLit</span> clause1 <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-stj">VecLit</span>();
     clause1<span class="pl-k">.</span>push(<span class="pl-stj">Lit</span><span class="pl-k">.</span>valueOf(<span class="pl-c1">1</span>, <span class="pl-c1">false</span>));
@@ -503,11 +502,55 @@ function setDocumentScrollTop(ypos)
     clause2<span class="pl-k">.</span>push(<span class="pl-stj">Lit</span><span class="pl-k">.</span>valueOf(<span class="pl-c1">1</span>, <span class="pl-c1">true</span>));
     solver<span class="pl-k">.</span>addClause(clause2);
     <span class="pl-st">boolean</span> result <span class="pl-k">=</span> solver<span class="pl-k">.</span>solve();
-    assertEquals(<span class="pl-c1">true</span>, result);
+    assertEquals(<span class="pl-c1">true</span>, result); <span class="pl-c">// must be satisfiable</span>
     <span class="pl-stj">Lbool</span> [] expects <span class="pl-k">=</span> {<span class="pl-stj">Lbool</span><span class="pl-c1"><span class="pl-k">.</span>FALSE</span>, <span class="pl-stj">Lbool</span><span class="pl-c1"><span class="pl-k">.</span>FALSE</span>, <span class="pl-stj">Lbool</span><span class="pl-c1"><span class="pl-k">.</span>FALSE</span>};
     <span class="pl-k">if</span> (result)
         <span class="pl-k">for</span> (<span class="pl-st">int</span> i <span class="pl-k">=</span> <span class="pl-c1">0</span>, size <span class="pl-k">=</span> expects<span class="pl-k">.</span>length; i <span class="pl-k">&lt;</span> size; <span class="pl-k">++</span>i)
             assertEquals(expects[i], solver<span class="pl-k">.</span>model<span class="pl-k">.</span>get(i));
+}</pre>
+</div> 
+<p>or more simply</p> 
+<div class="highlight highlight-java">
+ <pre>@<span class="pl-stj">Test</span>
+<span class="pl-s">public</span> <span class="pl-st">void</span> testSolveSimple() {
+        <span class="pl-stj">Lbool</span> [] expects <span class="pl-k">=</span> {<span class="pl-stj">Lbool</span><span class="pl-c1"><span class="pl-k">.</span>FALSE</span>, <span class="pl-stj">Lbool</span><span class="pl-c1"><span class="pl-k">.</span>FALSE</span>, <span class="pl-stj">Lbool</span><span class="pl-c1"><span class="pl-k">.</span>FALSE</span>};
+        <span class="pl-stj">Solver</span> solver <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-stj">Solver</span>();
+        solver<span class="pl-k">.</span>addClause(<span class="pl-c1">1</span>, <span class="pl-k">-</span><span class="pl-c1">3</span>);
+        solver<span class="pl-k">.</span>addClause(<span class="pl-c1">2</span>, <span class="pl-c1">3</span>, <span class="pl-k">-</span><span class="pl-c1">1</span>);
+        <span class="pl-st">boolean</span> result <span class="pl-k">=</span> solver<span class="pl-k">.</span>solve();
+        assertEquals(<span class="pl-c1">true</span>, result);
+        <span class="pl-k">if</span> (result)
+            <span class="pl-k">for</span> (<span class="pl-st">int</span> i <span class="pl-k">=</span> <span class="pl-c1">0</span>, size <span class="pl-k">=</span> expects<span class="pl-k">.</span>length; i <span class="pl-k">&lt;</span> size; <span class="pl-k">++</span>i)
+                assertEquals(expects[i], solver<span class="pl-k">.</span>model<span class="pl-k">.</span>get(i));
+}</pre>
+</div> 
+<h2> <a id="user-content-find-all-solutions" class="anchor" href="..md.html#find-all-solutions" aria-hidden="true"><span class="octicon octicon-link"></span></a>Find all solutions</h2> 
+<p>If there are many solutions, you can obtain all of them.</p> 
+<div class="highlight highlight-java">
+ <pre><span class="pl-st">int</span> deny(<span class="pl-stj">Solver</span> solver, <span class="pl-st">int</span> v) {
+    <span class="pl-k">return</span> solver<span class="pl-k">.</span>model<span class="pl-k">.</span>get(v <span class="pl-k">-</span> <span class="pl-c1">1</span>) <span class="pl-k">==</span> <span class="pl-stj">Lbool</span><span class="pl-c1"><span class="pl-k">.</span>TRUE</span> <span class="pl-k">?</span> <span class="pl-k">-</span>v <span class="pl-k">:</span> v;
+}
+
+@<span class="pl-stj">Test</span>
+<span class="pl-s">public</span> <span class="pl-st">void</span> testFindAllSolutions() {
+    <span class="pl-stj">Solver</span> solver <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-stj">Solver</span>();
+    solver<span class="pl-k">.</span>addClause(<span class="pl-c1">1</span>, <span class="pl-c1">2</span>);
+    solver<span class="pl-k">.</span>addClause(<span class="pl-k">-</span><span class="pl-c1">1</span>, <span class="pl-k">-</span><span class="pl-c1">2</span>);
+    solver<span class="pl-k">.</span>addClause(<span class="pl-c1">2</span>, <span class="pl-c1">3</span>);
+    solver<span class="pl-k">.</span>addClause(<span class="pl-k">-</span><span class="pl-c1">2</span>, <span class="pl-k">-</span><span class="pl-c1">3</span>);
+    solver<span class="pl-k">.</span>addClause(<span class="pl-c1">3</span>, <span class="pl-c1">4</span>);
+    solver<span class="pl-k">.</span>addClause(<span class="pl-k">-</span><span class="pl-c1">3</span>, <span class="pl-k">-</span><span class="pl-c1">4</span>);
+    solver<span class="pl-k">.</span>addClause(<span class="pl-c1">4</span>, <span class="pl-c1">1</span>);
+    solver<span class="pl-k">.</span>addClause(<span class="pl-k">-</span><span class="pl-c1">4</span>, <span class="pl-k">-</span><span class="pl-c1">1</span>);
+    <span class="pl-st">int</span> numberOfSolutions <span class="pl-k">=</span> <span class="pl-c1">0</span>;
+    <span class="pl-k">while</span> (solver<span class="pl-k">.</span>solve()) {
+        <span class="pl-k">++</span>numberOfSolutions;
+        <span class="pl-stj">System</span><span class="pl-k">.</span>out<span class="pl-k">.</span>printf(<span class="pl-s1"><span class="pl-pds">&quot;</span>solution %d : %s%n<span class="pl-pds">&quot;</span></span>, numberOfSolutions, solver<span class="pl-k">.</span>model);
+        <span class="pl-c">// add a clause which deny found solution</span>
+        solver<span class="pl-k">.</span>addClause(deny(solver, <span class="pl-c1">1</span>), deny(solver, <span class="pl-c1">2</span>), deny(solver, <span class="pl-c1">3</span>), deny(solver, <span class="pl-c1">4</span>));
+    }
+    <span class="pl-stj">System</span><span class="pl-k">.</span>out<span class="pl-k">.</span>printf(<span class="pl-s1"><span class="pl-pds">&quot;</span>number of solution = %d%n<span class="pl-pds">&quot;</span></span>, numberOfSolutions);
+    assertEquals(<span class="pl-c1">2</span>, numberOfSolutions);
 }</pre>
 </div>
 </body>

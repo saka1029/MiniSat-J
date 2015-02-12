@@ -16,15 +16,8 @@ public class TestSolver {
     
     void solve(int[][] problem, boolean result, Lbool[] expects) {
         Solver solver = new Solver();
-        for (int i = 0, imax = problem.length; i < imax; ++i) {
-            VecLit lits = new VecLit();
-            for (int j = 0, jmax = problem[i].length; j < jmax; ++j) {
-                int v = problem[i][j];
-                int var = Math.abs(v) - 1;
-                lits.push(Lit.valueOf(var, v < 0));
-            }
-            solver.addClause(lits);
-        }
+        for (int i = 0, imax = problem.length; i < imax; ++i)
+        	solver.addClause(problem[i]);
         boolean ret = solver.solve();
         assertEquals(result, ret);
         if (ret)
@@ -42,7 +35,28 @@ public class TestSolver {
      */
     @Test
     public void testSolveSimple() {
+        Solver solver = new Solver();
+        solver.addClause(1, -3);
+        solver.addClause(2, 3, -1);
+//        VecLit clause1 = new VecLit();
+//        clause1.push(Lit.valueOf(1, false));
+//        clause1.push(Lit.valueOf(3, true));
+//        solver.addClause(clause1);
+//        VecLit clause2 = new VecLit();
+//        clause2.push(Lit.valueOf(2, false));
+//        clause2.push(Lit.valueOf(3, false));
+//        clause2.push(Lit.valueOf(1, true));
+//        solver.addClause(clause2);
+        boolean result = solver.solve();
+        assertEquals(true, result);	// must be satisfiable
         Lbool [] expects = {Lbool.FALSE, Lbool.FALSE, Lbool.FALSE};
+        if (result)
+            for (int i = 0, size = expects.length; i < size; ++i)
+                assertEquals(expects[i], solver.model.get(i));
+    }
+
+    @Test
+    public void testSolveSimple2() {
         Solver solver = new Solver();
         VecLit clause1 = new VecLit();
         clause1.push(Lit.valueOf(1, false));
@@ -54,7 +68,8 @@ public class TestSolver {
         clause2.push(Lit.valueOf(1, true));
         solver.addClause(clause2);
         boolean result = solver.solve();
-        assertEquals(true, result);
+        assertEquals(true, result);	// must be satisfiable
+        Lbool [] expects = {Lbool.FALSE, Lbool.FALSE, Lbool.FALSE};
         if (result)
             for (int i = 0, size = expects.length; i < size; ++i)
                 assertEquals(expects[i], solver.model.get(i));
@@ -403,5 +418,54 @@ public class TestSolver {
         };
         Lbool[] expects = null;
         solve(problem, false, expects);
+    }
+    
+    /************
+        <instance>
+        <presentation name="mutexK4" maxConstraintArity="2" format="XCSP 2.0"/>
+        <domains nbDomains="1">
+        <domain name="D0" nbValues="2">1..2</domain>
+        </domains>
+        <variables nbVariables="4">
+        <variable name="V1" domain="D0"/>
+        <variable name="V2" domain="D0"/>
+        <variable name="V3" domain="D0"/>
+        <variable name="V4" domain="D0"/>
+        </variables>
+        <relations nbRelations="1">
+        <relation name="mutex" arity="2" nbTuples="2" semantics="conflicts">1 1|2 2|</relation>
+        </relations>
+        <constraints nbConstraints="4">
+        <constraint name="C1" arity="2" scope="V1 V2" reference="mutex"/>
+        <constraint name="C2" arity="2" scope="V2 V3" reference="mutex"/>
+        <constraint name="C3" arity="2" scope="V3 V4" reference="mutex"/>
+        <constraint name="C4" arity="2" scope="V4 V1" reference="mutex"/>
+        </constraints>
+        </instance>
+    **************/
+    int deny(Solver solver, int v) {
+    	return solver.model.get(v - 1) == Lbool.TRUE ? -v : v;
+    }
+
+    @Test
+    public void testFindAllSolutions() {
+    	Solver solver = new Solver();
+    	solver.addClause(1, 2);
+    	solver.addClause(-1, -2);
+    	solver.addClause(2, 3);
+    	solver.addClause(-2, -3);
+    	solver.addClause(3, 4);
+    	solver.addClause(-3, -4);
+    	solver.addClause(4, 1);
+    	solver.addClause(-4, -1);
+    	int numberOfSolutions = 0;
+        while (solver.solve()) {
+        	++numberOfSolutions;
+        	System.out.printf("solution %d : %s%n", numberOfSolutions, solver.model);
+        	// add a clause which deny found solution
+        	solver.addClause(deny(solver, 1), deny(solver, 2), deny(solver, 3), deny(solver, 4));
+        }
+        System.out.printf("number of solution = %d%n", numberOfSolutions);
+        assertEquals(2, numberOfSolutions);
     }
 }
