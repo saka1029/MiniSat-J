@@ -32,6 +32,34 @@ public class TestSolver {
                 assertEquals(expects[i], solver.model.get(i));
     }
 
+    /*
+     * Solving a simple problem
+     * 
+     *  p cnf 3 2
+     *  1 -3 0
+     *  2 3 -1 0
+     *  0
+     */
+    @Test
+    public void testSolveSimple() {
+        Lbool [] expects = {Lbool.FALSE, Lbool.FALSE, Lbool.FALSE};
+        Solver solver = new Solver();
+        VecLit clause1 = new VecLit();
+        clause1.push(Lit.valueOf(1, false));
+        clause1.push(Lit.valueOf(3, true));
+        solver.addClause(clause1);
+        VecLit clause2 = new VecLit();
+        clause2.push(Lit.valueOf(2, false));
+        clause2.push(Lit.valueOf(3, false));
+        clause2.push(Lit.valueOf(1, true));
+        solver.addClause(clause2);
+        boolean result = solver.solve();
+        assertEquals(true, result);
+        if (result)
+            for (int i = 0, size = expects.length; i < size; ++i)
+                assertEquals(expects[i], solver.model.get(i));
+    }
+
     @Test
     public void testSimple() {
         int[][] problem = {
