@@ -1,0 +1,32 @@
+ガベージコレクションのコードは以下の通り。
+
+void Solver::garbageCollect()
+{
+    // Initialize the next region to a size corresponding to the estimated utilization degree. This
+    // is not precise but should avoid some unnecessary reallocations for the new region:
+    ClauseAllocator to(ca.size() - ca.wasted()); 
+
+    relocAll(to);
+    if (verbosity >= 2)
+        printf("|  Garbage collection:   %12d bytes => %12d bytes             |\n", 
+               ca.size()*ClauseAllocator::Unit_Size, to.size()*ClauseAllocator::Unit_Size);
+    to.moveTo(ca);
+}
+
+ClauseクラスのインスタンスはClauseAllocatorによって割り当てられている。
+ここでは新しいClauseAllocatorを作成して、古いClauseをすべてコピーしている。
+最後のto.moveTo(ca)はもとのClauseAllocatorに結果を戻している。
+つまりコピーGCを採用している。
+
+    【コピーGC】
+    通常使用するメモリ領域と同じ容量のメモリ領域をもうひとつ用意し、
+    ガベージコレクションの際に有効なオブジェクトのみをもう一方の
+    メモリ領域にコピーする方法。
+    メモリ領域をデータ保持に必要な容量の2倍消費すること、
+    コピーの際にオブジェクトのアドレスが変更されることなどの欠点があるが、
+    ガベージコレクションとコンパクションが同時に行える利点がある。
+    
+乱数発生のdrand(double seed), irand(double seed, int size)における
+seed引数を削除。
+ 
+ 
