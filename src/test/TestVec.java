@@ -1,7 +1,7 @@
 package test;
 
 import static org.junit.Assert.*;
-import minisatj.mtl.Vec;
+import jp.saka1029.minisatj.mtl.Vec;
 
 import org.junit.Test;
 

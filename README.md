@@ -3,7 +3,7 @@ MiniSat-J is a porting MiniSat2.0 to Java8
 
 ## Run from command line
 ```
-> java -jar minisatj-1.0.jar data\bw_large.x.cnf
+> java -jar jp.saka1029.minisatj-1.0.jar data\bw_large.x.cnf
 ============================[ Problem Statistics ]=============================
 |                                                                             |
 |  Number of variables:          6325                                         |
@@ -34,13 +34,12 @@ SATISFIABLE
 
 ## Run from Java application
 
-Here is a sample problem.
+Here is a sample problem in DIMACS format.
 
 ```
 p cnf 3 2
 1 -3 0
 2 3 -1 0
-0
 ```
 
 Solving this problem by Java using Minisat-J API.

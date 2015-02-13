@@ -1,10 +1,10 @@
 package test;
 
 import static org.junit.Assert.*;
-import minisatj.core.Lbool;
-import minisatj.core.Lit;
-import minisatj.core.Solver;
-import minisatj.core.VecLit;
+import jp.saka1029.minisatj.core.Lbool;
+import jp.saka1029.minisatj.core.Lit;
+import jp.saka1029.minisatj.core.Solver;
+import jp.saka1029.minisatj.core.VecLit;
 
 import org.junit.Test;
 

@@ -1,15 +1,15 @@
 package test;
 
 import static org.junit.Assert.*;
-import minisatj.utils.BoolOption;
-import minisatj.utils.DoubleOption;
-import minisatj.utils.DoubleRange;
-import minisatj.utils.Int64Option;
-import minisatj.utils.Int64Range;
-import minisatj.utils.IntOption;
-import minisatj.utils.IntRange;
-import minisatj.utils.Option;
-import minisatj.utils.StringOption;
+import jp.saka1029.minisatj.utils.BoolOption;
+import jp.saka1029.minisatj.utils.DoubleOption;
+import jp.saka1029.minisatj.utils.DoubleRange;
+import jp.saka1029.minisatj.utils.Int64Option;
+import jp.saka1029.minisatj.utils.Int64Range;
+import jp.saka1029.minisatj.utils.IntOption;
+import jp.saka1029.minisatj.utils.IntRange;
+import jp.saka1029.minisatj.utils.Option;
+import jp.saka1029.minisatj.utils.StringOption;
 
 import org.junit.Test;
 

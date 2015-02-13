@@ -13,9 +13,9 @@
         </javac>
     </target>
 	<target name="jar" depends="compile">
-		<jar basedir="${bin}" jarfile="minisatj-1.0.jar" update="false">
+		<jar basedir="${bin}" jarfile="jp.saka1029.minisatj-1.0.jar" update="false">
 			<manifest>
-				<attribute name="Main-Class" value="minisatj.core.Main"/>
+				<attribute name="Main-Class" value="jp.saka1029.minisatj.core.Main"/>
 			</manifest>
 		</jar>
 	</target>

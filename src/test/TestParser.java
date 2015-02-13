@@ -5,7 +5,7 @@ import static org.junit.Assert.*;
 import java.io.IOException;
 import java.io.StringReader;
 
-import minisatj.utils.Parser;
+import jp.saka1029.minisatj.utils.Parser;
 
 import org.junit.Test;
 
