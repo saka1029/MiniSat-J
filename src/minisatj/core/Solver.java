@@ -48,6 +48,10 @@ import minisatj.mtl.VecInt;
 //
 //class Solver {
 public class Solver {
+	static void printf(String format, Object... args) {
+		System.out.printf(format + "%n", args);
+	}
+
 //public:
 //
 //    // Constructor/Destructor:
@@ -587,7 +591,7 @@ public class Solver {
 //
 ////=================================================================================================
 //// Default options value:
-	public static final int VERBOSITY_DEFAULT = 1;
+	public static final int VERBOSITY_DEFAULT = 0;
     public static final double VAR_DECAY_DEFAULT = 0.95;
     public static final double CLAUSE_DECAY_DEFAULT = 0.999;
     public static final double RANDOM_VAR_FREQ_DEFAULT = 0;
@@ -1749,7 +1753,7 @@ Lbool search(int nof_conflicts) {
                 max_learnts             *= learntsize_inc;
 
                 if (verbosity >= 1)
-                    Log.info("| %9d | %7d %8d %8d | %8d %8d %6.0f | %6.3f %% |", 
+                    printf("| %9d | %7d %8d %8d | %8d %8d %6.0f | %6.3f %% |", 
                            (int)conflicts, 
                            (int)dec_vars - (trail_lim.size() == 0 ? trail.size() : trail_lim.get(0)), nClauses(), (int)clauses_literals, 
                            (int)max_learnts, nLearnts(), (double)learnts_literals/nLearnts(), progressEstimate()*100);
@@ -1932,14 +1936,10 @@ Lbool solve_() {
     Lbool   status            = Lbool.UNDEF;
 
     if (verbosity >= 1){
-        Log.info("============================[ Problem Statistics ]=============================");
-        Log.info("|                                                                             |");
-        Log.info("|  Number of variables:  %12d                                         |", nVars());
-        Log.info("|  Number of clauses:    %12d                                         |", nClauses());
-        Log.info("============================[ Search Statistics ]==============================");
-        Log.info("| Conflicts |          ORIGINAL         |          LEARNT          | Progress |");
-        Log.info("|           |    Vars  Clauses Literals |    Limit  Clauses Lit/Cl |          |");
-        Log.info("===============================================================================");
+        printf("============================[ Search Statistics ]==============================");
+        printf("| Conflicts |          ORIGINAL         |          LEARNT          | Progress |");
+        printf("|           |    Vars  Clauses Literals |    Limit  Clauses Lit/Cl |          |");
+        printf("===============================================================================");
     }
 
     // Search:
@@ -1952,7 +1952,7 @@ Lbool solve_() {
     }
 
     if (verbosity >= 1)
-        Log.info("===============================================================================");
+        printf("===============================================================================");
 
 
     if (status == Lbool.TRUE) {
@@ -2101,7 +2101,7 @@ void toDimacs(PrintWriter f, VecLit assumps) {
         toDimacs(f, clauses.get(i), map, max);
 
     if (verbosity > 0)
-        Log.info("Wrote %d clauses with %d variables.", cnt, max[0]);
+        printf("Wrote %d clauses with %d variables.", cnt, max[0]);
 }
 //
 //

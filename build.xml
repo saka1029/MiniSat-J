@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="Shift_JIS"?>
+<project name="minisatj" default="jar" basedir="." >
+    <property name="src" location="src" />
+    <property name="bin" location="bin" />
+    <property name="classpath"
+        location="C:/app/eclipse-kepler-sr2/plugins/org.junit_4.11.0.v201303080030/junit.jar" />
+    <target name="compile">
+        <mkdir dir="${bin}" />
+        <javac srcdir="${src}" destdir="${bin}"
+            classpath="${classpath}"
+            encoding="UTF-8"
+            includeantruntime="false" >
+        </javac>
+    </target>
+	<target name="jar" depends="compile">
+		<jar basedir="${bin}" jarfile="minisatj-1.0.jar" update="false">
+			<manifest>
+				<attribute name="Main-Class" value="minisatj.core.Main"/>
+			</manifest>
+		</jar>
+	</target>
+    <target name="all" depends="compile,jar" />
+</project>

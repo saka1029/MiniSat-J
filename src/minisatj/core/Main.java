@@ -64,17 +64,21 @@ public class Main {
 //    if (mem_used != 0) printf("Memory used           : %.2f MB\n", mem_used);
 //    printf("CPU time              : %g s\n", cpu_time);
 //}
+	static void printf(String format, Object... args) {
+		System.out.printf(format + "%n", args);
+	}
+
 	static void printStats(Solver solver, long elapseMills) {
 	    double cpu_time = SystemStats.cpuTime();
 	    double mem_used = SystemStats.memUsedPeak();
-	    Log.info("restarts              : %d", solver.starts);
-	    Log.info("conflicts             : %-12d   (%.0f /sec)", solver.conflicts   , solver.conflicts   /cpu_time);
-	    Log.info("decisions             : %-12d   (%4.2f %% random) (%.0f /sec)", solver.decisions, (float)solver.rnd_decisions*100 / (float)solver.decisions, solver.decisions   /cpu_time);
-	    Log.info("propagations          : %-12d   (%.0f /sec)", solver.propagations, solver.propagations/cpu_time);
-	    Log.info("conflict literals     : %-12d   (%4.2f %% deleted)", solver.tot_literals, (solver.max_literals - solver.tot_literals)*100 / (double)solver.max_literals);
-	    if (mem_used != 0) Log.info("Memory used           : %.2f MB", mem_used);
-	    Log.info("CPU time              : %g sec", cpu_time);
-	    Log.info("elapse time           : %g sec", (double)elapseMills / 1000);
+	    printf("restarts              : %d", solver.starts);
+	    printf("conflicts             : %-12d   (%.0f /sec)", solver.conflicts   , solver.conflicts   /cpu_time);
+	    printf("decisions             : %-12d   (%4.2f %% random) (%.0f /sec)", solver.decisions, (float)solver.rnd_decisions*100 / (float)solver.decisions, solver.decisions   /cpu_time);
+	    printf("propagations          : %-12d   (%.0f /sec)", solver.propagations, solver.propagations/cpu_time);
+	    printf("conflict literals     : %-12d   (%4.2f %% deleted)", solver.tot_literals, (solver.max_literals - solver.tot_literals)*100 / (double)solver.max_literals);
+	    if (mem_used != 0) printf("Memory used           : %.2f MB", mem_used);
+	    printf("CPU time              : %g sec", cpu_time);
+	    printf("elapse time           : %g sec", (double)elapseMills / 1000);
 	}
 //
 //
@@ -270,7 +274,7 @@ public class Main {
         DoubleOption  opt_garbage_frac = new DoubleOption(_cat, "gc-frac",     "The fraction of wasted memory allowed before a garbage collection is triggered",  Solver.GARBAGE_FRAC_DEFAULT, new DoubleRange(0, false, Double.MAX_VALUE, false));
         // Extra options:
         //
-        IntOption opt_verbosity = new IntOption("MAIN", "verb",   "Verbosity level (0=silent, 1=some, 2=more).", Solver.VERBOSITY_DEFAULT, new IntRange(0, 2));
+        IntOption opt_verbosity = new IntOption("MAIN", "verb",   "Verbosity level (0=silent, 1=some, 2=more).", 1, new IntRange(0, 2));
 //        IntOption cpu_lim = new IntOption("MAIN", "cpu-lim","Limit on CPU time allowed in seconds.%n", Integer.MAX_VALUE, new IntRange(0, Integer.MAX_VALUE));
 //        IntOption mem_lim = new IntOption("MAIN", "mem-lim","Limit on memory usage in megabytes.%n", Integer.MAX_VALUE, new IntRange(0, Integer.MAX_VALUE));
         
@@ -321,12 +325,12 @@ public class Main {
 //            } }
         
         if (argv.length == 0)
-            Log.info("Reading from standard input... Use '--help' for help.%n");
+            printf("Reading from standard input... Use '--help' for help.%n");
         
         try (Reader in = argv.length == 0 ? new InputStreamReader(System.in) : new FileReader(argv[0])) {
 	        if (S.verbosity > 0){
-	            Log.info("============================[ Problem Statistics ]=============================");
-	            Log.info("|                                                                             |");
+	            printf("============================[ Problem Statistics ]=============================");
+	            printf("|                                                                             |");
 	        }
 	        Dimacs.parse_DIMACS(in, S);
         }
@@ -337,13 +341,13 @@ public class Main {
         	res = new PrintWriter(new FileWriter(argv[1]));
         try {
 	        if (S.verbosity > 0){
-	            Log.info("|  Number of variables:  %12d                                         |", S.nVars());
-	            Log.info("|  Number of clauses:    %12d                                         |", S.nClauses()); }
+	            printf("|  Number of variables:  %12d                                         |", S.nVars());
+	            printf("|  Number of clauses:    %12d                                         |", S.nClauses()); }
 	        
 	        double parsed_time = SystemStats.cpuTime();
 	        if (S.verbosity > 0){
-	            Log.info("|  Parse time:           %12.2f sec                                     |", parsed_time - initial_time);
-	            Log.info("|                                                                             |"); }
+	            printf("|  Parse time:           %12.2f sec                                     |", parsed_time - initial_time);
+	            printf("|                                                                             |"); }
 	 
 	        // Change to signal-handlers that will only notify the solver and allow it to terminate
 	        // voluntarily:
@@ -354,19 +358,19 @@ public class Main {
 	            if (res != null)
 	            	res.printf("UNSAT%n");
 	            if (S.verbosity > 0){
-	                Log.info("===============================================================================");
-	                Log.info("Solved by unit propagation");
+	                printf("===============================================================================");
+	                printf("Solved by unit propagation");
 	                printStats(S, System.currentTimeMillis() - start);
-	                Log.info(""); }
-	            Log.info("UNSATISFIABLE");
+	                printf(""); }
+	            printf("UNSATISFIABLE");
 	        }
 	        
 	        VecLit dummy = new VecLit();
 	        ret = S.solveLimited(dummy);
 	        if (S.verbosity > 0){
 	            printStats(S, System.currentTimeMillis() - start);
-	            Log.info(""); }
-	        Log.info(ret == Lbool.TRUE ? "SATISFIABLE" : ret == Lbool.FALSE ? "UNSATISFIABLE" : "INDETERMINATE");
+	            printf(""); }
+	        printf(ret == Lbool.TRUE ? "SATISFIABLE" : ret == Lbool.FALSE ? "UNSATISFIABLE" : "INDETERMINATE");
 	        if (res != null){
 	            if (ret == Lbool.TRUE) {
 	                res.printf("SAT%n");

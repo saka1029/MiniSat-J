@@ -3,33 +3,33 @@ MiniSat-J is a porting MiniSat2.0 to Java8
 
 ## Run from command line
 ```
-> java -jar minisatj-1.0.jar 8queens.cnf 8queens.out
-2015-02-12T20:42:33.554 INFO ============================[ Problem Statistics ]=============================
-2015-02-12T20:42:33.562 INFO |                                                                             |
-2015-02-12T20:42:33.593 INFO |  Number of variables:            64                                         |
-2015-02-12T20:42:33.594 INFO |  Number of clauses:             744                                         |
-2015-02-12T20:42:33.597 INFO |  Parse time:                   0.05 sec                                     |
-2015-02-12T20:42:33.597 INFO |                                                                             |
-2015-02-12T20:42:33.598 INFO ============================[ Problem Statistics ]=============================
-2015-02-12T20:42:33.599 INFO |                                                                             |
-2015-02-12T20:42:33.600 INFO |  Number of variables:            64                                         |
-2015-02-12T20:42:33.601 INFO |  Number of clauses:             744                                         |
-2015-02-12T20:42:33.603 INFO ============================[ Search Statistics ]==============================
-2015-02-12T20:42:33.604 INFO | Conflicts |          ORIGINAL         |          LEARNT          | Progress |
-2015-02-12T20:42:33.605 INFO |           |    Vars  Clauses Literals |    Limit  Clauses Lit/Cl |          |
-2015-02-12T20:42:33.605 INFO ===============================================================================
-2015-02-12T20:42:33.614 INFO ===============================================================================
-2015-02-12T20:42:33.615 INFO restarts              : 1
-2015-02-12T20:42:33.616 INFO conflicts             : 27             (157 /sec)
-2015-02-12T20:42:33.616 INFO decisions             : 52             (0.00 % random) (303 /sec)
-2015-02-12T20:42:33.619 INFO propagations          : 412            (2397 /sec)
-2015-02-12T20:42:33.620 INFO conflict literals     : 437            (1.58 % deleted)
-2015-02-12T20:42:33.620 INFO Memory used           : 59.00 MB
-2015-02-12T20:42:33.621 INFO CPU time              : 0.171875 sec
-2015-02-12T20:42:33.621 INFO elapse time           : 0.157000 sec
-2015-02-12T20:42:33.622 INFO
-2015-02-12T20:42:33.623 INFO SATISFIABLE
+> java -jar minisatj-1.0.jar data\bw_large.x.cnf
+============================[ Problem Statistics ]=============================
+|                                                                             |
+|  Number of variables:          6325                                         |
+|  Number of clauses:          131974                                         |
+|  Parse time:                   0.31 sec                                     |
+|                                                                             |
+============================[ Search Statistics ]==============================
+| Conflicts |          ORIGINAL         |          LEARNT          | Progress |
+|           |    Vars  Clauses Literals |    Limit  Clauses Lit/Cl |          |
+===============================================================================
+|       100 |    6325   131974   300443 |    48390      100     13 |  0.000 % |
+|       250 |    5586   131974   300443 |    53229      244     12 | 11.684 % |
+|       475 |    5354   111495   249871 |    58552      456     12 | 15.352 % |
+|       812 |    5248   111495   249871 |    64407      792     11 | 17.028 % |
+|      1318 |    5248   104736   234807 |    70848     1297     11 | 17.028 % |
+===============================================================================
+restarts              : 10
+conflicts             : 1581           (955 /sec)
+decisions             : 3756           (0.00 % random) (2268 /sec)
+propagations          : 1129406        (681906 /sec)
+conflict literals     : 18198          (23.96 % deleted)
+Memory used           : 106.00 MB
+CPU time              : 1.65625 sec
+elapse time           : 1.79900 sec
 
+SATISFIABLE
 ```
 
 ## Run from Java application
