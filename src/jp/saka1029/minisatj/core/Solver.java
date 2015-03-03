@@ -1407,8 +1407,7 @@ Clause propagate() {
             	c.set(0, c.get(1));
             	c.set(1, false_lit);
             }
-            if (c.get(1) != false_lit)
-            	throw new IllegalStateException();
+            assert c.get(1) == false_lit;
             i++;
 
             // If 0th watch is true, then clause is already satisfied.

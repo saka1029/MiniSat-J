@@ -1,5 +1,6 @@
 package jp.saka1029.minisatj.mtl;
 
+import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 ///*******************************************************************************************[VecIntObject.h]
@@ -40,7 +41,7 @@ import java.util.NoSuchElementException;
 //
 //template<class T>
 //class vec {
-public abstract class VecIntObject<T> {
+public abstract class VecIntObject<T> implements Iterable<T> {
 //    T*  data;
 	private int[] data = null;
 //    int sz;
@@ -298,4 +299,13 @@ public abstract class VecIntObject<T> {
 	protected abstract int value(T object);
 	protected abstract int compare(int a, int b);
 	protected abstract String toString(int value);
+	
+	@Override
+		public Iterator<T> iterator() {
+			return new Iterator<T>() {
+				int i = 0;
+				@Override public boolean hasNext() { return i < sz; }
+				@Override public T next() { return create(data[i++]); }
+			};
+		}
 }

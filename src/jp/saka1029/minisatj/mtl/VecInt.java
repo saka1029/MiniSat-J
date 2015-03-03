@@ -128,13 +128,13 @@ public class VecInt {
 //    // Vector interface:
 //    const T& operator [] (int index) const { return data[index]; }
 	public int get(int index) {
-		if (index >= sz)
-			throw new IndexOutOfBoundsException("index");
+//		if (index >= sz)
+//			throw new IndexOutOfBoundsException("index");
 		return data[index];
 	}
 	public int set(int index, int elem) {
-		if (index >= sz)
-			throw new IndexOutOfBoundsException("index");
+//		if (index >= sz)
+//			throw new IndexOutOfBoundsException("index");
 		return data[index] = elem;
 	}
 //    T&       operator [] (int index)       { return data[index]; }

@@ -1,0 +1,38 @@
++----------------------------------------------------------------------
+|  File: profile.txt
+|  Date: 2015.02.13 22:20:53 ŒßŒã
++----------------------------------------------------------------------
+
++------------------------------
+| Thread depth limit: Compact
++------------------------------
+
++--------------------------------------
+| Most expensive methods (by net time)
+| Frame Count Limit: Compact
++--------------------------------------
+
+               Net
+          ------------
+ Count     Time    Pct  Location
+ =====     ====    ===  ========
+     1     19.4   99.5  jp.saka1029.minisatj.core.Main:main
+
++--------------------------------------+
+| Most expensive methods summarized    |
++--------------------------------------+
+
+               Net
+          ------------
+ Count     Time    Pct  Location
+ =====     ====    ===  ========
+     1     19.4   99.5  jp.saka1029.minisatj.core.Main:main
+
++---------------------------------+
+| Object Allocation               |
++---------------------------------+
+
+     Count Class Name
+     ===== ==========
+         1  jp.saka1029.minisatj.mtl.Vec
+         1  jp.saka1029.minisatj.utils.Option$OptionComp

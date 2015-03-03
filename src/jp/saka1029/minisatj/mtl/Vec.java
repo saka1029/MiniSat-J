@@ -2,6 +2,7 @@ package jp.saka1029.minisatj.mtl;
 
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 ///*******************************************************************************************[Vec.h]
@@ -41,7 +42,7 @@ import java.util.NoSuchElementException;
 //
 //template<class T>
 //class vec {
-public class Vec<T> {
+public class Vec<T> implements Iterable<T> {
 //    T*  data;
 	private T[] data = null;
 //    int sz;
@@ -137,13 +138,13 @@ public class Vec<T> {
 //    // Vector interface:
 //    const T& operator [] (int index) const { return data[index]; }
 	public T get(int index) {
-		if (index >= sz)
-			throw new IndexOutOfBoundsException("index");
+//		if (index >= sz)
+//			throw new IndexOutOfBoundsException("index");
 		return data[index];
 	}
 	public T set(int index, T elem) {
-		if (index >= sz)
-			throw new IndexOutOfBoundsException("index");
+//		if (index >= sz)
+//			throw new IndexOutOfBoundsException("index");
 		return data[index] = elem;
 	}
 //    T&       operator [] (int index)       { return data[index]; }
@@ -258,5 +259,14 @@ public class Vec<T> {
 	    	throw new NoSuchElementException("t");
 	    for (; j < data.length-1; j++) data[j] = data[j+1];
 	    pop();
+	}
+
+	@Override
+	public Iterator<T> iterator() {
+		return new Iterator<T>() {
+			int i = 0;
+			@Override public boolean hasNext() { return i < sz; } 
+			@Override public T next() { return data[i++]; }
+		};
 	}
 }

@@ -7,6 +7,11 @@ public class VecLit extends VecIntObject<Lit> {
 	public VecLit() { super(); }
 	public VecLit(int size) { super(size); }
 	public VecLit(int size, Lit pad) { super(size, pad); }
+	public VecLit(Lit... lits) {
+		super();
+		for (Lit e : lits)
+			push(e);
+	}
 	
 	@Override public Lit create() { return Lit.UNDEF; }
 	@Override public Lit create(int value) { return Lit.valueOf(value); }
